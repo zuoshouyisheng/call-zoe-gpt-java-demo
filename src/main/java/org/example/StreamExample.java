@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 
 class ZoeAuthenticationInterceptor implements Interceptor {
@@ -35,10 +34,10 @@ class ZoeAuthenticationInterceptor implements Interceptor {
     }
 }
 
-public class OpenAiApiFunctionsWithStreamExample {
+public class StreamExample {
     private static OpenAiService getZoeService() {
         String baseUrl = "https://openapi.zuoshouyisheng.com/gpt/v1/openai-compatible/";
-        String ZoeToken = "ZOE-xxxx-c1d8b97";
+        String ZoeToken = "ZOE-xxxxxxxxx";
         Duration timeout = Duration.ofSeconds(60);
         OkHttpClient client = (new OkHttpClient.Builder()).addInterceptor(new ZoeAuthenticationInterceptor(ZoeToken)).connectionPool(new ConnectionPool(5, 1L, TimeUnit.SECONDS)).readTimeout(timeout.toMillis(), TimeUnit.MILLISECONDS).build();
 
@@ -53,6 +52,10 @@ public class OpenAiApiFunctionsWithStreamExample {
         Retrofit retrofit = (new Retrofit.Builder()).baseUrl(baseUrl).client(client).addConverterFactory(JacksonConverterFactory.create(mapper)).addCallAdapterFactory(RxJava2CallAdapterFactory.create()).build();
 
         OpenAiApi api = (OpenAiApi) retrofit.create(ZoeOpenAiApi.class);
+        // ZoeOpenAiApi 将API PATH 全部改成了相对路径
+        // 这是因为左医 openai-compatiable 的API PATH 包含前缀 /gpt/v1/openai-compatible/
+        // Retrofit 拼接URL时会将前缀和相对路径拼接成完整路径
+        // 如果 Api.class 中的方法路径是完整路径，那么最终拼接的URL会自动去掉前缀, 会导致无法请求到
         return new OpenAiService(api);
     }
 
