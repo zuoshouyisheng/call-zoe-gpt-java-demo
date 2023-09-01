@@ -5,7 +5,7 @@
 您可以访问 左手医生开放平台 https://ai.zuoshouyisheng.com/ 浏览接口文档、创建API密钥.
 
 
-左医大模型提供的接口 openai格式, 所以您可以使用适用于 openai 的 java client 调用左医大模型.
+左医大模型提供的接口兼容 openai 格式, 所以您可以使用适用于 openai 的 java client 调用左医大模型.
 
 
 请注意左医大模型与openai有一些差异
